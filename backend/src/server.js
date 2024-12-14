@@ -4,6 +4,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const testRoutes = require('./routes/test.route');
 const userRoutes = require('./routes/user.routes');
+const resumeRoutes = require('./routes/resume.routes');
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 // Routes
 app.use('/api', testRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/resumes', resumeRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
