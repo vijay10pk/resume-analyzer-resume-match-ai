@@ -17,5 +17,6 @@ router.post('/upload',
 router.get('/', resumeController.getUserResumes);
 router.get('/:id', resumeController.getResume);
 router.delete('/:id', resumeController.deleteResume);
+// router.post('/:resumeId/compare/:jobDescriptionId', resumeController.compareWithJob); // Compare resume with a job description
 
 module.exports = router;
