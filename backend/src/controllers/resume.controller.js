@@ -1,5 +1,7 @@
 const Resume = require('../models/resume.model');
 const storageUtils = require('../utils/storage.utils');
+const aiUtils = require('../utils/ai.utils');
+// const AnalysisResult = require('../models/analysis.result.model');
 
 const resumeController = {
     async uploadResume(req, res) {
@@ -18,13 +20,21 @@ const resumeController = {
             // Save file
             const storedFile = await storageUtils.saveFile(file);
 
+            // Parse resume using AI
+            const { parsed_data, skills } = await aiUtils.parseResume(file);
+            console.log('Parsed Data received in controller:', {
+                rawText: parsed_data.rawText ? parsed_data.rawText.substring(0, 100) + '...' : 'No raw text',
+                skills: skills
+            });
+
             // Create resume record
             const resume = await Resume.create({
                 user_id: userId,
                 title: storedFile.originalName.replace(/\.pdf$/i, ""),
-                // original_content: file.buffer.toString(),
-                original_content: `Content will be parsed from file: ${storedFile.originalName}`,
+                original_content: parsed_data.rawText,
                 file_path: storedFile.filePath,
+                parsed_data: parsed_data,
+                skills: skills,
                 metadata: {
                     originalName: storedFile.originalName,
                     mimeType: storedFile.mimeType,
@@ -49,6 +59,50 @@ const resumeController = {
             res.status(500).json({ error: 'Internal server error' });
         }
     },
+
+    /* // Add a new method for job comparison
+    async compareWithJob(req, res) {
+        try {
+            const { resumeId, jobDescriptionId } = req.params;
+            const userId = req.user.id;
+
+            // Fetch resume and job description
+            const resume = await Resume.findById(resumeId);
+            const jobDescription = await JobDescription.findById(jobDescriptionId);
+
+            if (!resume || !jobDescription) {
+                return res.status(404).json({ error: 'Resume or job description not found' });
+            }
+
+            if (resume.user_id !== userId || jobDescription.user_id !== userId) {
+                return res.status(403).json({ error: 'Unauthorized' });
+            }
+
+            // Perform AI analysis
+            const analysis = await aiUtils.compareWithJob(
+                resume.parsed_data,
+                jobDescription.original_content
+            );
+
+            // Store analysis results
+            const analysisResult = await AnalysisResult.create({
+                resume_id: resumeId,
+                job_description_id: jobDescriptionId,
+                match_percentage: analysis.matchPercentage,
+                matching_skills: analysis.matchingSkills,
+                missing_skills: analysis.missingSkills,
+                analysis_details: analysis
+            });
+
+            res.json({
+                message: 'Analysis completed successfully',
+                analysis: analysisResult
+            });
+        } catch (error) {
+            console.error('Error comparing resume with job:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    }, */
 
     async getResume(req, res) {
         try {

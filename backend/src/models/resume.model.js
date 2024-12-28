@@ -83,6 +83,7 @@ class Resume {
             user_id: this.user_id,
             title: this.title,
             file_path: this.file_path,
+            // original_content: this.original_content,
             parsed_data: this.parsed_data,
             skills: this.skills,
             metadata: this.metadata,
