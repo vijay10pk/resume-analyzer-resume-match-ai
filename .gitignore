@@ -75,6 +75,7 @@ build/Release
 # Dependency directories
 node_modules/
 jspm_packages/
+package-lock.json
 
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
@@ -210,4 +211,14 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-/uploads/
+# Upload directory
+uploads/
+/uploads
+**/uploads/
+
+# IDE specific files
+.idea
+.vscode
+*.swp
+*.swo
+.DS_Store
