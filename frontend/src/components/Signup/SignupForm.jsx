@@ -1,11 +1,7 @@
-import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useActionData } from "react-router-dom";
 import { Form } from "react-router-dom";
+import PasswordInput from "../Inputs/PasswordInput";
 const SignupForm = () => {
-  const [isVisible1, setIsVisible1] = useState(false);
-  const [isVisible2, setIsVisibl2] = useState(false);
   const data = useActionData();
   return (
     <>
@@ -20,46 +16,8 @@ const SignupForm = () => {
             className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400"
             required
           />
-          <div className="relative">
-            <input
-              name="password"
-              type={isVisible1 ? "text" : "password"}
-              placeholder="Password"
-              className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400"
-              required
-            />
-            <button
-              type="button"
-              className="absolute right-3 top-1/3 transform -translate-y-1/2 text-gray-500"
-              onClick={() => setIsVisible1(!isVisible1)}
-            >
-              {isVisible1 ? (
-                <FontAwesomeIcon icon={faEye} className="text-gray-500" />
-              ) : (
-                <FontAwesomeIcon icon={faEyeSlash} className="text-gray-500" />
-              )}
-            </button>
-          </div>
-          <div className="relative">
-            <input
-              name="confirmPassword"
-              type={isVisible2 ? "text" : "password"}
-              placeholder="Confirm Password"
-              className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400"
-              required
-            />
-            <button
-              type="button"
-              className="absolute right-3 top-1/3 transform -translate-y-1/2 text-gray-500"
-              onClick={() => setIsVisibl2(!isVisible2)}
-            >
-              {isVisible2 ? (
-                <FontAwesomeIcon icon={faEye} className="text-gray-500" />
-              ) : (
-                <FontAwesomeIcon icon={faEyeSlash} className="text-gray-500" />
-              )}
-            </button>
-          </div>
+          <PasswordInput name="Password" />
+          <PasswordInput name="Confirm Password" />
           {data && data.error && (
             <p className="text-red-600 text-xs mb-4">Error : {data.error}</p>
           )}

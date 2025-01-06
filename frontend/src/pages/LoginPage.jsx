@@ -2,6 +2,7 @@ import React from "react";
 import { useActionData } from "react-router-dom";
 import LoginForm from "../components/Login/LoginForm";
 import RightSection from "../components/Login/RightSection";
+import { redirect } from "react-router-dom";
 
 const LoginPage = () => {
   const data = useActionData();
@@ -22,8 +23,8 @@ export async function SignInAction({ request, params }) {
   const data = await request.formData();
   console.log(data);
   const reqData = {
-    email: data.get("email"),
-    password: data.get("password"),
+    email: data.get("Email"),
+    password: data.get("Password"),
   };
   console.log(reqData);
   const response = await fetch("backend-api", {
@@ -35,4 +36,8 @@ export async function SignInAction({ request, params }) {
   });
   if (!response.ok) {
   }
+  const resData = await response.json();
+  const token = resData.token;
+  localStorage.setItem("token", token);
+  return redirect("/home");
 }

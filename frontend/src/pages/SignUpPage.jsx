@@ -2,6 +2,7 @@ import React from "react";
 
 import SignupForm from "../components/Signup/SignupForm";
 import RightSection from "../components/Signup/RightSection";
+import { redirect } from "react-router-dom";
 
 const SignUpPage = () => {
   return (
@@ -19,8 +20,8 @@ export default SignUpPage;
 
 export async function SignUpAction({ request, params }) {
   const data = await request.formData();
-  const password = data.get("password");
-  const confirmPassword = data.get("confirmPassword");
+  const password = data.get("Password");
+  const confirmPassword = data.get("Confirm Password");
   if (password !== confirmPassword) {
     return { error: "Passwords do not match" };
   }
@@ -38,4 +39,8 @@ export async function SignUpAction({ request, params }) {
   });
   if (!response.ok) {
   }
+  const resData = await response.json();
+  const token = resData.token;
+  localStorage.setItem("token", token);
+  return redirect("/home");
 }
